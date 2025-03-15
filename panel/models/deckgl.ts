@@ -106,6 +106,7 @@ export class DeckGLPlotView extends LayoutDOMView {
     }
   }
 
+  
   _update_data(render: boolean = true): void {
     for (const layer of this.model.layers) {
       if('dataIdx' in layer) {
@@ -117,8 +118,10 @@ export class DeckGLPlotView extends LayoutDOMView {
       this.updateDeck()
     }
   }
+  
 
-  /* original version
+  /*
+  // original version
   _update_data(render: boolean = true): void {
     let n = 0
     for (const layer of this.model.layers) {
@@ -138,8 +141,9 @@ export class DeckGLPlotView extends LayoutDOMView {
       this.updateDeck()
     }
   }
-    */
+  */
 
+  
   _on_click_event(event: any): void {
     const click_state: any = {
       coordinate: event.coordinate,
@@ -151,6 +155,7 @@ export class DeckGLPlotView extends LayoutDOMView {
     }
     this.model.clickState = click_state
   }
+    
 
   _on_hover_event(event: any): void {
     if (event.coordinate == null) {

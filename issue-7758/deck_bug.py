@@ -98,10 +98,10 @@ class DeckGLViewer(pn.viewable.Viewer):
 
     def test_click(self, event):
         print("Button clicked...")
-        #self.ref_scatter_df['fcolor'] = [[180, 18, 90]] * len(self.ref_scatter_df)
-        #self.qry_scatter_df['fcolor'] = [[10, 180, 90]] * len(self.qry_scatter_df)
-        #self.ref_scatter_layer.data = self.ref_scatter_df
-        #self.qry_scatter_layer.data = self.qry_scatter_df
+        self.ref_df['fcolor'] = [[180, 18, 90]] * len(self.ref_df)
+        self.qry_df['fcolor'] = [[10, 180, 90]] * len(self.qry_df)
+        self.ref_scatter_layer.data = self.ref_df
+        self.qry_scatter_layer.data = self.qry_df
         preTriggerObj = str(self.deckgl_pane.object)
         self.deckgl_pane.param.trigger('object')
         postTriggerObj = str(self.deckgl_pane.object)
