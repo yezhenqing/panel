@@ -1,6 +1,6 @@
 import {div} from "@bokehjs/core/dom"
 import type * as p from "@bokehjs/core/properties"
-import {isNumber} from "@bokehjs/core/util/types"
+//import {isNumber} from "@bokehjs/core/util/types"
 import {LayoutDOM, LayoutDOMView} from "@bokehjs/models/layouts/layout_dom"
 import {ColumnDataSource} from "@bokehjs/models/sources/column_data_source"
 
@@ -44,7 +44,7 @@ export class DeckGLPlotView extends LayoutDOMView {
   deckGL: any
   _connected: any[]
   _map: any
-  _layer_map: any
+  //_layer_map: any
   _view_cb: any
   _initialized: boolean = false
 
@@ -55,7 +55,7 @@ export class DeckGLPlotView extends LayoutDOMView {
     this.on_change([data, initialViewState], () => this.updateDeck())
     this.on_change([layers], () => this._update_layers())
     this.on_change([data_sources], () => this._connect_sources(true))
-    this._layer_map = {}
+    //this._layer_map = {}
     this._connected = []
     this._connect_sources()
   }
@@ -66,7 +66,7 @@ export class DeckGLPlotView extends LayoutDOMView {
   }
 
   _update_layers(): void {
-    this._layer_map = {}
+    //this._layer_map = {}
     this._update_data(true)
   }
 
@@ -107,6 +107,19 @@ export class DeckGLPlotView extends LayoutDOMView {
   }
 
   _update_data(render: boolean = true): void {
+    for (const layer of this.model.layers) {
+      if('dataIdx' in layer) {
+        const cds = this.model.data_sources[layer.dataIdx]
+        layer.data = transform_cds_to_records(cds)
+      }
+    }
+    if (render) {
+      this.updateDeck()
+    }
+  }
+
+  /* original version
+  _update_data(render: boolean = true): void {
     let n = 0
     for (const layer of this.model.layers) {
       let cds
@@ -125,6 +138,7 @@ export class DeckGLPlotView extends LayoutDOMView {
       this.updateDeck()
     }
   }
+    */
 
   _on_click_event(event: any): void {
     const click_state: any = {
@@ -315,6 +329,8 @@ export interface DeckGLPlot extends DeckGLPlot.Attrs { }
 
 export class DeckGLPlot extends LayoutDOM {
   declare properties: DeckGLPlot.Props
+  layers: any
+  data_sources: any
 
   constructor(attrs?: Partial<DeckGLPlot.Attrs>) {
     super(attrs)

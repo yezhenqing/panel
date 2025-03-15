@@ -155,6 +155,9 @@ class DeckGL(ModelPane):
                 columns[col].append(val)
         return {col: np.asarray(vals) for col, vals in columns.items()}
 
+
+    """
+    # original version
     @classmethod
     def _update_sources(cls, json_data, sources: list[ColumnDataSource]):
         layers = json_data.get('layers', [])
@@ -200,6 +203,29 @@ class DeckGL(ModelPane):
                 cds = ColumnDataSource(data)
                 sources.append(cds)
             layer['data'] = sources.index(cds)
+    """
+
+    # new version - yez - 03/15/2025
+    @classmethod
+    def _update_sources(cls, json_data, sources: list[ColumnDataSource]):
+        layers = json_data.get('layers', [])
+        # simply dump the list (sources) first
+        sources.clear()
+        i = 0
+        for layer in layers:
+            data = layer.get('data')
+            if is_dataframe(data):
+                data = ColumnDataSource.from_df(data)
+            elif (isinstance(data, list) and data
+                  and isinstance(data[0], dict)):
+                data = cls._process_data(data)
+            else:
+                continue
+            cds = ColumnDataSource(data)
+            sources.append(cds)
+            layer['dataIdx'] = i
+            i += 1
+
 
     @classmethod
     def _add_pydeck_encoders(cls):
